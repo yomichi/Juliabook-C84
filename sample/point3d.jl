@@ -1,9 +1,6 @@
-module RW
-export Point3D,CPoint3D,DPoint3D,update!,update
+export Point3D,CPoint3D,DPoint3D
 
-abstract Point3D{T<:Real}
-
-import Base.zero
+abstract Point3D{T<:Real} <: Point{T}
 
 type CPoint3D{T<:Real} <: Point3D{T} # 'C' is "Continuous"
   x :: T
@@ -31,7 +28,11 @@ zero{T<:Real}(::Type{DPoint3D{T}}) = DPoint3D{T}(zero(T),zero(T),zero(T))
 /{P<:Point3D}(p::P, a::Real) = P(p.x/a, p.y/a, p.z/a)
 \{P<:Point3D}(a::Real,p::P) = p/a
 
-import Base.Random.rand
+abs2{P<:Point3D}(p::P) = p.x^2 + p.y^2 + p.z^2
+abs{P<:Point3D}(p::P) = sqrt(abs2(p))
+norm2{P<:Point3D}(p::P) = abs2(p)
+norm{P<:Point3D}(p::P) = sqrt(norm2(p))
+
 function rand{T<:Real}(::Type{DPoint3D{T}})
   r = 6*Random.rand()
   if r < 1.0
@@ -63,9 +64,3 @@ function update!{P<:Point3D}(p::P)
   return p
 end
 
-update{P<:Point3D}(p::P) = update!(deepcopy(p))
-
-update!{T}(v::Vector{T}) = map!(update,v)
-update{T}(v::Vector{T}) = map(update,v)
-
-end

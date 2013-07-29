@@ -1,9 +1,9 @@
-module RW
-export Point2D,CPoint2D,DPoint2D,update!,update
+export Point2D,CPoint2D,DPoint2D
 
-abstract Point2D{T<:Real}
+abstract Point2D{T<:Real} <: Point{T}
 
-import Base.zero
+import Base.zero, Base.abs, Base.abs2, Base.norm
+import Base.Random.rand, Base.Random.rand!
 
 type CPoint2D{T<:Real} <: Point2D{T} # 'C' is "Continuous"
   x :: T
@@ -29,7 +29,12 @@ zero{T<:Real}(::Type{DPoint2D{T}}) = DPoint2D{T}(zero(T),zero(T))
 /{P<:Point2D}(p::P, a::Real) = P(p.x/a, p.y/a) 
 \{P<:Point2D}(a::Real,p::P) = p/a
 
-import Base.Random.rand
+abs2{P<:Point2D}(p::P) = p.x^2+p.y^2
+abs{P<:Point2D}(p::P) = sqrt(abs2(p))
+norm2{P<:Point2D}(p::P) = abs2(p)
+norm{P<:Point2D}(p::P) = abs(p)
+
+
 function rand{T<:Real}(::Type{DPoint2D{T}})
   r = 4*Random.rand()
   if r < 1.0
@@ -45,7 +50,7 @@ end
 
 function rand{T<:Real}(::Type{CPoint2D{T}})
   theta = 2pi*rand()
-  return CPoint2D{T}(cos(theta),cos(theta))
+  return CPoint2D{T}(cos(theta),sin(theta))
 end
 
 function update!{P<:Point2D}(p::P)
@@ -55,9 +60,3 @@ function update!{P<:Point2D}(p::P)
   return p
 end
 
-update{P<:Point2D}(p::P) = update!(deepcopy(p))
-
-update!{T}(v::Vector{T}) = map!(update,v)
-update{T}(v::Vector{T}) = map(update,v)
-
-end

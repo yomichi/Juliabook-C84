@@ -1,9 +1,6 @@
-module RW
 export Point1D,CPoint1D,DPoint1D,update!,update
 
-abstract Point1D{T<:Real}
-
-import Base.zero
+abstract Point1D{T<:Real} <: Point{T}
 
 type CPoint1D{T<:Real} <: Point1D{T} # 'C' is "Continuous"
   x :: T
@@ -27,7 +24,10 @@ zero{T<:Real}(::Type{DPoint1D{T}}) = DPoint1D{T}(zero(T))
 /{P<:Point1D}(p::P, a::Real) = P(p.x/a)
 \{P<:Point1D}(a::Real,p::P) = p/a
 
-import Base.Random.rand
+abs2{P<:Point1D}(p::P) = p.x^2
+abs{P<:Point1D}(p::P) = abs(p.x)
+norm2{P<:Point1D}(p::P) = abs2(p)
+norm{P<:Point1D}(p::P) = abs(p.x)
 
 function rand{T<:Real}(::Type{DPoint1D{T}})
   if rand() < 0.5
@@ -51,9 +51,3 @@ function update!{P<:Point1D}(p::P)
   return p
 end
 
-update{P<:Point1D}(p::P) = update!(deepcopy(p))
-
-update!{T}(v::Vector{T}) = map!(update,v)
-update{T}(v::Vector{T}) = map(update,v)
-
-end
