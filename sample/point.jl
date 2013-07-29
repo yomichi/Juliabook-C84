@@ -1,6 +1,6 @@
 module RW
 
-export update, update!, norm2
+export update, update!, norm2, to_plot_str
 
 import Base.zero, Base.zeros, Base.abs, Base.abs2, Base.norm
 import Base.Random.rand, Base.Random.rand!
@@ -34,4 +34,6 @@ update{P<:Point}(p::P) = update!(deepcopy(p))
 update{P<:Point}(ps::Array{P}) = map(update,ps)
 update!{P<:Point}(ps::Array{P}) = map!(update!,ps)
 
-end # module
+to_plot_str(x) = "$x"
+
+end # module RW

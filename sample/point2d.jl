@@ -34,6 +34,7 @@ abs{P<:Point2D}(p::P) = sqrt(abs2(p))
 norm2{P<:Point2D}(p::P) = abs2(p)
 norm{P<:Point2D}(p::P) = abs(p)
 
+to_plot_str{P<:Point2D}(p::P) = "$(p.x) $(p.y)"
 
 function rand{T<:Real}(::Type{DPoint2D{T}})
   r = 4*Random.rand()

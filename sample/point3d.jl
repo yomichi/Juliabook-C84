@@ -33,6 +33,8 @@ abs{P<:Point3D}(p::P) = sqrt(abs2(p))
 norm2{P<:Point3D}(p::P) = abs2(p)
 norm{P<:Point3D}(p::P) = sqrt(norm2(p))
 
+to_plot_str{P<:Point3D}(p::P) = "$(p.x) $(p.y) $(p.z)"
+
 function rand{T<:Real}(::Type{DPoint3D{T}})
   r = 6*Random.rand()
   if r < 1.0

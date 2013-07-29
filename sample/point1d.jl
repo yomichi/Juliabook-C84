@@ -29,6 +29,8 @@ abs{P<:Point1D}(p::P) = abs(p.x)
 norm2{P<:Point1D}(p::P) = abs2(p)
 norm{P<:Point1D}(p::P) = abs(p.x)
 
+to_plot_str{P<:Point1D}(p::P) = "$(p.x)"
+
 function rand{T<:Real}(::Type{DPoint1D{T}})
   if rand() < 0.5
     return DPoint1D(one(T))

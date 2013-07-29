@@ -19,6 +19,10 @@ function parse_commandline()
       range_tester = x-> x>0 && x<4
     "--continuous", "-c"
       action = :store_true
+    "--output", "-o"
+      arg_type = String
+      default = "-"
+      range_tester = x->length(x)>0
   end
   return parse_args(settings)
 end
@@ -50,11 +54,21 @@ function main()
     end
   end
 
+  filename = pargs["output"]
+  output = 0
+  if filename == "-"
+    output = STDOUT
+  else
+    output = open(filename, "w")
+  end
+
   ps = zeros(PT,N)
   for t in 0:T
-    println("$t $(abs(mean(ps))) $(mean(map(abs2,ps)))")
+    write(output, "$t $( to_plot_str(mean(ps)) ) $( mean(map(abs2,ps)) )\n")
     update!(ps)
   end
+
+  close(output)
 end
 
 main()
