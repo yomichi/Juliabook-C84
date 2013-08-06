@@ -1,15 +1,19 @@
-module RW
-
 export update, update!, norm2, to_plot_str
 
-import Base.zero, Base.zeros, Base.abs, Base.abs2, Base.norm
+import Base.zero, Base.zeros, Base.eltype, Base.abs, Base.abs2, Base.norm
 import Base.Random.rand, Base.Random.rand!
+import Base.promote_rule
 
-abstract Point{T<:FloatingPoint}
+abstract Point{T<:Real}
+
+eltype{T}(p::Point{T}) = T
 
 include("point1d.jl")
 include("point2d.jl")
 include("point3d.jl")
+
+*(a, p::Point) = p*a
+\(a, p::Point) = p/a
 
 zero(p::Point) = zero(typeof(p))
 
@@ -42,4 +46,3 @@ update!{P<:Point}(ps::Array{P}) = map!(update!,ps)
 
 to_plot_str(x) = "$x"
 
-end # module RW
